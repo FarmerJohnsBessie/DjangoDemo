@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Hello World
+
+<textarea id="content"></textarea>
+<button id="submit">Submit</button>
+{% for blog in blogs %}
+    <div>
+        <h2>{{ blog.title }}</h2>
+        <p>{{ blog.content|linebreaks }}</p>
+    </div>
+{% empty %}
+    <p>No blog posts available.</p>
+{% endfor %}
+
+<script>
+    var submit = document.getElementById('submit');
+    submit.addEventListener('click', function() {
+        var text = document.getElementById('content').value;
+        fetch('/addBlog/', {
+            method: 'POST',
+            body: JSON.stringify({content: text}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            console.log(data);
+        });
+    });
+</script>
+
+</body>
+</html>
